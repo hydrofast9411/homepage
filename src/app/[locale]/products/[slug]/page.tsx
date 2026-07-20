@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { db } from "@/db/client";
 import { products, manufacturers, productCategories, productImages } from "@/db/schema";
@@ -10,6 +11,40 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import type { Locale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = (await getLocale()) as Locale;
+  const [row] = await db
+    .select({ product: products, manufacturer: manufacturers })
+    .from(products)
+    .leftJoin(manufacturers, eq(products.manufacturerId, manufacturers.id))
+    .where(and(eq(products.slug, slug), eq(products.isPublished, true)));
+
+  if (!row) return {};
+  const name = locale === "ko" ? row.product.nameKo : row.product.nameEn ?? row.product.nameKo;
+  const description =
+    (locale === "ko" ? row.product.shortDescriptionKo : row.product.shortDescriptionEn) ??
+    row.product.shortDescriptionKo ??
+    undefined;
+  const title = row.manufacturer ? `${name} — ${row.manufacturer.name}` : name;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: row.product.primaryImagePath
+        ? [publicImageUrl("product-images", row.product.primaryImagePath)!]
+        : undefined,
+    },
+  };
+}
 
 export default async function ProductDetailPage({
   params,

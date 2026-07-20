@@ -1,5 +1,6 @@
 import { defineConfig } from "drizzle-kit";
-import "dotenv/config";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 
 // This config is used only for `drizzle-kit generate` (producing SQL migration files /
 // keeping schema.ts and docs/sql/*.md in sync) and `drizzle-kit studio` (local DB browsing).

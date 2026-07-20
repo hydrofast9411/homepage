@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { db } from "@/db/client";
 import { businessAreas, productCategories, manufacturers, manufacturerBusinessAreas, caseStudies } from "@/db/schema";
@@ -15,6 +16,21 @@ import type { Locale } from "@/i18n/routing";
 // continuously, so these render dynamically per-request rather than being
 // prerendered at build time (which would also require DB access at build time).
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ areaSlug: string }>;
+}): Promise<Metadata> {
+  const { areaSlug } = await params;
+  const locale = (await getLocale()) as Locale;
+  const [area] = await db.select().from(businessAreas).where(eq(businessAreas.slug, areaSlug));
+  if (!area) return {};
+
+  const name = locale === "ko" ? area.nameKo : area.nameEn ?? area.nameKo;
+  const description = (locale === "ko" ? area.summaryKo : area.summaryEn) ?? area.summaryKo ?? undefined;
+  return { title: name, description };
+}
 
 export default async function BusinessAreaPage({
   params,
