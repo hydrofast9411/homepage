@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local Claude Code harness state
+/.claude
+
 # one-time-use staging copy of the legacy static site's assets/data for
 # scripts/migrate-legacy-content.ts — not needed once that script has run
 /legacy-content
