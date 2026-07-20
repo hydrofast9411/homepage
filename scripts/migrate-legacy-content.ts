@@ -9,9 +9,12 @@
  * Run once after docs/sql/001_initial_schema.md has been applied:
  *   npm run db:migrate-legacy
  *
- * Assumes the legacy static site still lives at ../hydrofast_website
- * relative to this project (i.e. both folders are siblings under
- * 동신소재/). Adjust LEGACY_ROOT below if that's not the case.
+ * Reads from legacy-content/ (a copy of the old static site's assets/, data/,
+ * and pdf_into_png/ folders, bundled into this project so migration doesn't
+ * depend on the original hydrofast_website folder continuing to exist).
+ * legacy-content/ is gitignored — it's a one-time-use local staging area;
+ * once this script has been run successfully against the live DB, the images
+ * live in Supabase Storage and this folder is no longer needed.
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
@@ -23,7 +26,7 @@ import { caseStudies, clientLogos } from "../src/db/schema";
 import { eq } from "drizzle-orm";
 import { uploadImageVariants } from "../src/lib/images";
 
-const LEGACY_ROOT = path.resolve(__dirname, "../../hydrofast_website");
+const LEGACY_ROOT = path.resolve(__dirname, "../legacy-content");
 
 interface LegacyCaseStudy {
   id: string;

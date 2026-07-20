@@ -37,6 +37,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# one-time-use staging copy of the legacy static site's assets/data for
+# scripts/migrate-legacy-content.ts — not needed once that script has run
+/legacy-content
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

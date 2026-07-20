@@ -15,7 +15,7 @@ Next.js (App Router, TypeScript) rebuild of the HYDROFAST corporate site — bil
    npm run db:seed            # 4 business areas, 2 affiliates, 16 partner brands + HydroFast, 9 product categories with spec schemas, history, certifications
    npm run db:migrate-legacy  # imports the legacy site's 17 case studies + 37 client logos and their images
    ```
-   `db:migrate-legacy` expects the old static site at `../hydrofast_website` (sibling folder) — edit `LEGACY_ROOT` in `scripts/migrate-legacy-content.ts` if it's elsewhere.
+   `db:migrate-legacy` reads from `legacy-content/` (a gitignored, one-time-use copy of the old static site's `assets/`, `data/`, and `pdf_into_png/` folders bundled into this project). Once it's run successfully against the live DB, the images live in Supabase Storage and `legacy-content/` can be deleted.
 5. Log into `/admin` and start adding manufacturers/products/etc. that aren't covered by the seed script (it only creates category *schemas* + a handful of reference rows — real product data is entered by hand through the admin, per the plan).
 
 ## Local development
