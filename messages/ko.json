@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "home": "홈",
+    "businessAreas": "사업 분야",
+    "products": "제품 검색",
+    "partners": "파트너사",
+    "affiliates": "관계사",
+    "cases": "제작 사례",
+    "about": "회사 소개",
+    "contact": "견적 문의",
+    "langToggle": "EN"
+  },
+  "common": {
+    "search": "검색",
+    "searchPlaceholder": "부품명, 브랜드, 규격으로 검색",
+    "viewAll": "전체 보기",
+    "viewDetail": "자세히 보기",
+    "readMore": "더 알아보기",
+    "noResults": "검색 결과가 없습니다.",
+    "loading": "불러오는 중...",
+    "filterByBusinessArea": "사업 분야",
+    "filterByCategory": "제품 분류",
+    "filterByManufacturer": "제조사",
+    "allCategories": "전체",
+    "backToList": "목록으로",
+    "specifications": "제품 사양",
+    "relatedProducts": "관련 제품",
+    "country": "국가",
+    "website": "웹사이트",
+    "model": "모델명"
+  },
+  "hero": {
+    "kicker": "HYDRAULIC SYSTEM & SOLUTION PROVIDER",
+    "title": "플랜트·조선·스마트팩토리를 위한<br/>토탈 유압 솔루션",
+    "desc": "효율적이고 정밀한 제어. 설계부터 시공, FMS 모니터링까지.",
+    "ctaProducts": "제품 검색",
+    "ctaContact": "상담 문의",
+    "statYears": "업력",
+    "statPressure": "최대 취급 압력",
+    "statPartners": "해외 파트너사"
+  },
+  "businessAreas": {
+    "sectionTitle": "주요 사업 분야",
+    "boltingTorque": "정밀 볼팅 & 토크 솔루션",
+    "fluidGas": "초고압 유체·가스 시스템",
+    "hydraulicEngineering": "토탈 유압 시스템",
+    "fireSafety": "소방·환경·산업안전 솔루션"
+  },
+  "cases": {
+    "sectionTitle": "맞춤 주문제작 사례",
+    "sectionSub": "상담부터 시공·관리까지 — 효율적 설계 · 정밀 제작 · 안전 시공 · 체계적 유지관리"
+  },
+  "clients": {
+    "sectionTitle": "주요 납품 실적"
+  },
+  "partners": {
+    "sectionTitle": "해외 파트너사",
+    "sectionSub": "각 사업 분야별로 협력하는 해외 제조사입니다.",
+    "productsFrom": "이 제조사의 제품"
+  },
+  "affiliatesSection": {
+    "sectionTitle": "관계사"
+  },
+  "contactPage": {
+    "title": "유압 솔루션의 모든 것,<br/>지금 상담하세요.",
+    "sub": "전문 엔지니어가 최적의 솔루션을 제안해 드립니다.",
+    "formName": "이름",
+    "formCompany": "회사명",
+    "formEmail": "이메일",
+    "formPhone": "연락처",
+    "formBusinessArea": "관심 분야",
+    "formMessage": "문의 내용",
+    "formSubmit": "문의 보내기",
+    "formSuccess": "문의가 접수되었습니다. 빠르게 회신드리겠습니다.",
+    "formError": "전송 중 오류가 발생했습니다. 다시 시도해주세요."
+  },
+  "footer": {
+    "ceo": "대표자: 최수성",
+    "registration": "사업자등록번호: 122-86-10520",
+    "address": "주소: 인천광역시 부평구 부평대로 283, 우림라이온스밸리 C동 610호",
+    "phone": "Tel: 032-623-5015",
+    "fax": "Fax: 032-623-5017",
+    "email": "E-mail: hydrofast@hydrofast.co.kr",
+    "businessHours": "영업시간: 평일 오전 9시 ~ 오후 6시 (토/일/공휴일 휴무)",
+    "copyright": "© 2026 HYDROFAST Co., Ltd. All rights reserved."
+  }
+}

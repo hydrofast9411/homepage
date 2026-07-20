@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "home": "Home",
+    "businessAreas": "Business Areas",
+    "products": "Products",
+    "partners": "Partners",
+    "affiliates": "Affiliates",
+    "cases": "Case Studies",
+    "about": "About",
+    "contact": "Contact",
+    "langToggle": "KO"
+  },
+  "common": {
+    "search": "Search",
+    "searchPlaceholder": "Search by part name, brand, or spec",
+    "viewAll": "View all",
+    "viewDetail": "View detail",
+    "readMore": "Read more",
+    "noResults": "No results found.",
+    "loading": "Loading...",
+    "filterByBusinessArea": "Business area",
+    "filterByCategory": "Category",
+    "filterByManufacturer": "Manufacturer",
+    "allCategories": "All",
+    "backToList": "Back to list",
+    "specifications": "Specifications",
+    "relatedProducts": "Related products",
+    "country": "Country",
+    "website": "Website",
+    "model": "Model No."
+  },
+  "hero": {
+    "kicker": "HYDRAULIC SYSTEM & SOLUTION PROVIDER",
+    "title": "Total Hydraulic Solutions<br/>for Plants, Shipyards & Smart Factories",
+    "desc": "Efficient, precise control — from design to on-site execution and FMS monitoring.",
+    "ctaProducts": "Browse Products",
+    "ctaContact": "Talk to Us",
+    "statYears": "Years in business",
+    "statPressure": "Max pressure handled",
+    "statPartners": "Overseas partners"
+  },
+  "businessAreas": {
+    "sectionTitle": "Main Business Areas",
+    "boltingTorque": "Precision Bolting & Torque",
+    "fluidGas": "High-Pressure Fluid & Gas",
+    "hydraulicEngineering": "Total Hydraulic Engineering",
+    "fireSafety": "Fire, Environment & Safety"
+  },
+  "cases": {
+    "sectionTitle": "Custom Order Cases",
+    "sectionSub": "From consultation to execution — efficient design, precision manufacturing, safe construction, systematic maintenance."
+  },
+  "clients": {
+    "sectionTitle": "Our Clients"
+  },
+  "partners": {
+    "sectionTitle": "Overseas Partners",
+    "sectionSub": "Manufacturer partners we work with across each business area.",
+    "productsFrom": "Products from this manufacturer"
+  },
+  "affiliatesSection": {
+    "sectionTitle": "Affiliates"
+  },
+  "contactPage": {
+    "title": "Ready to spec your<br/>hydraulic solution?",
+    "sub": "Our engineers will propose the right solution for your site.",
+    "formName": "Name",
+    "formCompany": "Company",
+    "formEmail": "Email",
+    "formPhone": "Phone",
+    "formBusinessArea": "Area of interest",
+    "formMessage": "Message",
+    "formSubmit": "Send inquiry",
+    "formSuccess": "Your inquiry has been received. We'll get back to you shortly.",
+    "formError": "Something went wrong while sending. Please try again."
+  },
+  "footer": {
+    "ceo": "CEO: Choi Su-Seong",
+    "registration": "Business Registration: 122-86-10520",
+    "address": "Address: Woolim Lions Valley C-610, 283 Bupyeong-daero, Bupyeong-gu, Incheon, South Korea",
+    "phone": "Tel: 032-623-5015",
+    "fax": "Fax: 032-623-5017",
+    "email": "E-mail: hydrofast@hydrofast.co.kr",
+    "businessHours": "Business Hours: Weekdays 9AM - 6PM (Closed Sat/Sun/Holidays)",
+    "copyright": "© 2026 HYDROFAST Co., Ltd. All rights reserved."
+  }
+}
