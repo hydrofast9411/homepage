@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
     "db:seed": "tsx scripts/seed-starter-data.ts",
+    "db:seed-content": "tsx scripts/seed-business-content.ts",
     "db:migrate-legacy": "tsx scripts/migrate-legacy-content.ts"
   },
   "dependencies": {

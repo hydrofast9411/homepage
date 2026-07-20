@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 
-const BUSINESS_AREA_LINK = { href: "/business/bolting-torque", key: "boltingTorque" } as const;
+export type NavArea = { slug: string; nameKo: string; nameEn: string; accent: string; index: string };
+
 const NAV_LINKS = [
   { href: "/products", key: "products" },
   { href: "/partners", key: "partners" },
@@ -13,12 +15,15 @@ const NAV_LINKS = [
   { href: "/about", key: "about" },
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ areas }: { areas: NavArea[] }) {
   const tNav = useTranslations("nav");
-  const tBiz = useTranslations("businessAreas");
+  const locale = useLocale() as Locale;
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [bizOpen, setBizOpen] = useState(false);
+
+  const areaName = (a: NavArea) => (locale === "ko" ? a.nameKo : a.nameEn);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -50,12 +55,47 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
-          <Link
-            href={BUSINESS_AREA_LINK.href}
-            className="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors"
+          <div
+            className="relative"
+            onMouseEnter={() => setBizOpen(true)}
+            onMouseLeave={() => setBizOpen(false)}
           >
-            {tBiz(BUSINESS_AREA_LINK.key)}
-          </Link>
+            <button
+              type="button"
+              onClick={() => setBizOpen((v) => !v)}
+              className="flex items-center gap-1 text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] transition-colors"
+            >
+              {tNav("businessAreas")}
+              <span className={`text-[10px] transition-transform ${bizOpen ? "rotate-180" : ""}`}>▾</span>
+            </button>
+            <AnimatePresence>
+              {bizOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute left-0 top-full w-80 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-xl"
+                >
+                  {areas.map((a) => (
+                    <Link
+                      key={a.slug}
+                      href={`/business/${a.slug}`}
+                      className="flex items-center gap-3 rounded-[var(--radius-card)] px-3 py-2.5 hover:bg-[var(--color-surface-alt)]"
+                    >
+                      <span
+                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--radius-card)] text-xs font-black text-white"
+                        style={{ backgroundColor: a.accent }}
+                      >
+                        {a.index}
+                      </span>
+                      <span className="text-sm font-semibold text-[var(--color-ink)]">{areaName(a)}</span>
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           {NAV_LINKS.map((item) => (
             <Link
               key={item.href}
@@ -107,9 +147,19 @@ export function SiteHeader() {
           exit={{ opacity: 0, height: 0 }}
           className="lg:hidden border-t border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4 flex flex-col gap-4"
         >
-          <Link href={BUSINESS_AREA_LINK.href} className="text-sm font-medium">
-            {tBiz(BUSINESS_AREA_LINK.key)}
-          </Link>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)]">
+              {tNav("businessAreas")}
+            </span>
+            {areas.map((a) => (
+              <Link key={a.slug} href={`/business/${a.slug}`} className="flex items-center gap-2 py-1 text-sm font-medium">
+                <span className="text-xs font-black" style={{ color: a.accent }}>
+                  {a.index}
+                </span>
+                {areaName(a)}
+              </Link>
+            ))}
+          </div>
           {NAV_LINKS.map((item) => (
             <Link key={item.href} href={item.href} className="text-sm font-medium">
               {tNav(item.key)}

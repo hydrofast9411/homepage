@@ -1,10 +1,11 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { db } from "@/db/client";
-import { businessAreas, caseStudies, clientLogos, manufacturers } from "@/db/schema";
+import { caseStudies, clientLogos, manufacturers } from "@/db/schema";
 import { asc, desc, eq } from "drizzle-orm";
 import { HomeHero } from "@/components/marketing/home-hero";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { BusinessAreaCard } from "@/components/marketing/business-area-card";
+import { AreaCard } from "@/components/marketing/area-card";
+import { getAllAreas } from "@/lib/areas";
 import { CaseStudyCard } from "@/components/marketing/case-study-card";
 import { LogoMarquee } from "@/components/marketing/logo-marquee";
 import { StatCounter } from "@/components/marketing/stat-counter";
@@ -23,7 +24,7 @@ export default async function HomePage() {
   ]);
 
   const [areas, highlightCases, logos, partnerBrands] = await Promise.all([
-    db.select().from(businessAreas).orderBy(asc(businessAreas.sortOrder)),
+    getAllAreas(),
     db
       .select()
       .from(caseStudies)
@@ -54,14 +55,10 @@ export default async function HomePage() {
 
       <section className="mx-auto max-w-[1400px] px-6 py-20">
         <SectionHeading title={tBiz("sectionTitle")} />
-        <RevealGrid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <RevealGrid className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {areas.map((area) => (
-            <RevealGridItem key={area.id}>
-              <BusinessAreaCard
-                area={area}
-                name={locale === "ko" ? area.nameKo : area.nameEn ?? area.nameKo}
-                summary={(locale === "ko" ? area.summaryKo : area.summaryEn ?? area.summaryKo) ?? ""}
-              />
+            <RevealGridItem key={area.slug}>
+              <AreaCard area={area} locale={locale} />
             </RevealGridItem>
           ))}
         </RevealGrid>
