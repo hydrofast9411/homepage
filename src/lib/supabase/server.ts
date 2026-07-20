@@ -31,24 +31,6 @@ export async function createClient() {
   );
 }
 
-/**
- * Service-role client — server-only, bypasses RLS. Used exclusively for Storage
- * uploads/deletes from Server Actions, never for table queries (Drizzle owns those)
- * and never imported into client code.
- */
-export function createServiceRoleClient() {
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return [];
-        },
-        setAll() {
-          // no-op: service-role client is never used for session-based auth
-        },
-      },
-    }
-  );
-}
+// Service-role client moved to lib/supabase/service-role.ts (no next/headers
+// dependency there, so it's importable from standalone scripts too).
+export { createServiceRoleClient } from "./service-role";

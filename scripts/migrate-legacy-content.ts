@@ -3,8 +3,9 @@
  * (data/custom_cases.json, data/customer_logos.json) plus their referenced
  * images. Uploads images to Supabase Storage (resized into the same fixed
  * WebP variants the admin upload flow produces) and inserts case_studies /
- * client_logos rows. Safe to re-run: skips rows that already exist by title
- * (case studies) or name (client logos).
+ * client_logos rows. Client logos dedup per-row by name; case studies are
+ * treated as a single batch (skipped entirely if the table is non-empty,
+ * since several legitimate rows intentionally share a title).
  *
  * Run once after docs/sql/001_initial_schema.md has been applied:
  *   npm run db:migrate-legacy
@@ -24,7 +25,7 @@ import path from "node:path";
 import { db } from "../src/db/client";
 import { caseStudies, clientLogos } from "../src/db/schema";
 import { eq } from "drizzle-orm";
-import { uploadImageVariants } from "../src/lib/images";
+import { uploadImageVariants } from "../src/lib/image-upload";
 
 const LEGACY_ROOT = path.resolve(__dirname, "../legacy-content");
 
@@ -36,6 +37,32 @@ interface LegacyCaseStudy {
   image: string;
   layout: string;
 }
+
+// data/custom_cases.json's `image` field (e.g. "custom_case_1766020000427.png")
+// doesn't match the actual filenames in assets/custom_cases/ (e.g.
+// "custom_case_특수선샤프트조립대차1(대우조선).png") — they were renamed on disk
+// at some point after the JSON was last written. Mapped by hand from the
+// legacy id (order-stable) to the correct file, verified 1:1 against the
+// directory listing (17 JSON records, 17 files, same client/title grouping).
+const CASE_STUDY_IMAGE_OVERRIDES: Record<string, string> = {
+  new_1766020000427: "custom_case_특수선샤프트조립대차1(대우조선).png",
+  new_1766020126763: "custom_case_특수선샤프트조립대차2(대우조선.png",
+  new_1766020152083: "custom_case_목형자동클램프장치.png",
+  new_1766020167199: "custom_case_프로펠러유압식설치장치(한화오션).png",
+  new_1766020190383: "custom_case_인바프레임제어이동로봇_회전구동(한화오션).png",
+  new_1766020227159: "custom_case_인바프레임제어이동로봇_상하구동(한화오션).png",
+  new_1766020244491: "custom_case_선박 블록 조립용 스키딩 시스템(한화오션).png",
+  new_1766020261143: "custom_case_다이아후램_커팅기1(한수원).png",
+  new_1766020261683: "custom_case_다이아후램_커팅기2(한수원).png",
+  new_1766020262171: "custom_case_파이프_세척장비1(한화오션).png",
+  new_1766020291091: "custom_case_파이프_세척장비2(한화오션).png",
+  new_1766020291559: "custom_case_탈선복구장비1(해군).png",
+  new_1766020292079: "custom_case_탈선복구장비2(해군).png",
+  new_1766020292539: "custom_case_스크류잭_조립해체_장치(한화오션).png",
+  new_1766020365535: "custom_case_CGIS도킹시스템_로봇1(효성).png",
+  new_1766020365991: "custom_case_CGIS도킹시스템_로봇2(효성).png",
+  new_1766020366515: "custom_case_CGIS도킹시스템_로봇3(효성).png",
+};
 
 interface LegacyClientLogo {
   id: string;
@@ -94,22 +121,27 @@ async function migrateCaseStudies() {
   const imagesDir = path.join(LEGACY_ROOT, "assets/custom_cases");
   const records: LegacyCaseStudy[] = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
 
+  // Several legitimate records intentionally share the same title (e.g. 3
+  // separate CGIS robot photos) so dedup can't be keyed by title — instead
+  // this whole migration is treated as a single batch: skip entirely if it
+  // looks like it already ran, rather than risking partial duplicates.
+  const alreadyMigrated = await db.select().from(caseStudies).limit(1);
+  if (alreadyMigrated.length > 0) {
+    console.log("  case_studies already has rows — skipping (delete them first to re-run this migration).");
+    return;
+  }
+
   console.log(`Migrating ${records.length} case studies...`);
   let sortOrder = 0;
   for (const record of records) {
-    const existing = await db.select().from(caseStudies).where(eq(caseStudies.titleKo, record.title));
-    if (existing.length > 0) {
-      sortOrder++;
-      continue;
-    }
-
-    const imagePath = path.join(imagesDir, record.image);
+    const filename = CASE_STUDY_IMAGE_OVERRIDES[record.id] ?? record.image;
+    const imagePath = path.join(imagesDir, filename);
     let cardPath: string | null = null;
     if (fs.existsSync(imagePath)) {
       const uploaded = await uploadImageVariants("case-study-images", readImageAsFile(imagePath));
       cardPath = uploaded.cardPath;
     } else {
-      console.warn(`  (missing image, skipping upload) ${record.image}`);
+      console.warn(`  (missing image, skipping upload) ${filename}`);
     }
 
     await db.insert(caseStudies).values({
